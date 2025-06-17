@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" Sdk="Microsoft.Docker.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectVersion>2.1</ProjectVersion>
+    <DockerTargetOS>Linux</DockerTargetOS>
+    <DockerPublishLocally>False</DockerPublishLocally>
+    <ProjectGuid>a7664c4a-3910-4863-a471-491d0dcced92</ProjectGuid>
+    <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
+    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
+    <DockerServiceName>gestaocompras.api</DockerServiceName>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="docker-compose-production.yml" />
+    <None Include="docker-compose.yml" />
+    <None Include=".dockerignore" />
+    <None Include="GestaoCompras.WEB\Layout\Component.razor" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GestaoCompras.WEB\Pages\" />
+  </ItemGroup>
+</Project>

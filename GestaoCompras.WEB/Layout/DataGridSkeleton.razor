@@ -1,0 +1,42 @@
+﻿@inherits DataGridSkeletonBase
+@attribute [Authorize]
+
+<MudGrid Spacing="3">
+
+    @if (ShowDetailHeader)
+    {
+        <MudItem xs="1">
+            <MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Height="50px" Width="50px" />
+        </MudItem>
+        <MudItem xs="11">
+            <MudSkeleton Animation="Animation.Wave" Height="50px" />
+        </MudItem>
+    }
+
+    @if (ShowCrudHeader)
+    {
+        <MudItem xs="7">
+            <MudGrid Spacing="1">
+                <MudItem xs="11"><MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="30px" /></MudItem>
+                <MudItem xs="1"><MudSkeleton SkeletonType="SkeletonType.Circle" Animation="Animation.Wave" Height="30px" Width="30px" /></MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="1"><MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="30px" /></MudItem>
+        <MudItem xs="2"><MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="30px" /></MudItem>
+        <MudItem xs="2"><MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="30px" /></MudItem>
+    }
+
+    <MudItem xs="12"><MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="50px" /></MudItem>
+
+    @for (var i = 0; i < 5; i++)
+    {
+        <MudItem xs="1"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+        <MudItem xs="3"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+        <MudItem xs="3"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+        <MudItem xs="2"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+        <MudItem xs="1"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+        <MudItem xs="1"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+        <MudItem xs="1"><MudSkeleton Animation="Animation.Wave" /></MudItem>
+    }
+
+</MudGrid>

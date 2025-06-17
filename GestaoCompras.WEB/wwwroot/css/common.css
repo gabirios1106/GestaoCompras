@@ -1,0 +1,7 @@
+﻿.blurry-dialog-class {
+    backdrop-filter: blur(10px);
+}
+
+.grecaptcha-badge {
+    visibility: hidden !important;
+}

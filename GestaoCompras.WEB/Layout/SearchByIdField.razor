@@ -1,0 +1,17 @@
+﻿@inherits SearchByIdFieldBase
+@attribute [Authorize]
+
+<MudNumericField @bind-Value="@SearchIdValue"
+                 Label="@PlaceHolderMessage"
+                 HelperText="@HelperMessage"
+                 AdornmentAriaLabel="@HelperMessage"
+                 Variant="Variant.Outlined"
+                 Margin="Margin.Dense"
+                 Clearable
+                 Adornment="Adornment.End"
+                 AdornmentIcon="@Icons.Material.Filled.Search"
+                 AdornmentColor="Color.Info"
+                 OnAdornmentClick="OnClickSearchAsync"
+                 OnKeyUp="OnKeyUpSearchAsync"
+                 Disabled="@Disabled"
+                 @ref="FieldSearchId" />

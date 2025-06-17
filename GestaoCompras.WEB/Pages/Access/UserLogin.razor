@@ -1,0 +1,66 @@
+﻿@page "/UserLogin"
+@inherits UserLoginBase
+
+<EditForm Model="UserLoginPostDTO" OnValidSubmit="LoginAsync">
+    <DataAnnotationsValidator />
+
+    <MudGrid Spacing="0" Justify="Justify.Center" Class="mx-0 my-0">
+        <MudItem xs="12" sm="12" md="5">
+            <MudCard Class="mx-auto mt-5">
+                <MudCardHeader Style="background-color:#eeede7">
+                    <CardHeaderContent>
+                        <MudPaper Class="d-flex align-center justify-center" Elevation="0" Outlined="false" Square="true" Style="background-color:#eeede7">
+                            <MudImage Src="images/LogoF1.png" Alt="Mesa do rei - Bruno" Width="100" />
+                        </MudPaper>
+                    </CardHeaderContent>
+                </MudCardHeader>
+
+                <MudDivider />
+
+                <MudCardContent>
+                    <MudGrid Spacing="2" Class="px-1">
+                        <MudItem xs="12" sm="12" md="12">
+                            <MudTextField @bind-Value="@UserLoginPostDTO.UserName" Label="Login" Variant="Variant.Outlined" Clearable FullWidth ReadOnly="@IsRevalidate" />
+                            <ValidationMessage For="@(() => UserLoginPostDTO.UserName)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="12">
+                            <MudTextField @bind-Value="@UserLoginPostDTO.PasswordHash" Label="Senha" InputType="InputType.Password" Variant="Variant.Outlined" Clearable FullWidth UserAttributes="@InputAttributes" />
+                            <ValidationMessage For="@(() => UserLoginPostDTO.PasswordHash)" />
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="12">
+                            <MudSwitch T="bool"
+                                       Color="Color.Primary"
+                                       Value="@RememberMe"
+                                       ValueChanged="ChangeRememberMeOptionAsync"
+                                       Label="Lembrar de mim" />
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+
+                <MudCardActions>
+                    <MudGrid Spacing="2" Class="mb-2 px-3">
+                        <MudItem xs="12">
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" FullWidth StartIcon="@Icons.Material.Filled.Login" Disabled="@SubmitInProgress">Acessar</MudButton>
+
+                            @if (SubmitInProgress)
+                            {
+                                <MudProgressLinear Color="Color.Primary" Indeterminate />
+                            }
+
+                        </MudItem>
+
+                        @if (IsRevalidate)
+                        {
+                            <MudItem xs="12">
+                                <MudLink Href="#" OnClick="ChangeUserAsync" Underline="Underline.None" Typo="Typo.caption" Class="d-flex justify-center align-start">Não é você?</MudLink>
+                            </MudItem>
+                        }
+
+                        <GoogleRecaptchaMessage />
+                    </MudGrid>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+</EditForm>

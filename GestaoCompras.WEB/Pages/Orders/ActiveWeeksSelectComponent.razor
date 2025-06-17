@@ -1,0 +1,33 @@
+﻿@inherits ActiveWeeksSelectComponentBase
+@attribute [Authorize]
+
+@if (PageIsReady)
+{
+    <MudSelect T="string"
+               Label="Semanas"
+               Variant="Variant.Outlined"
+               Value="@(string.IsNullOrEmpty(ActiveWeekIdSelected) ? null : ActiveWeekIdSelected)"
+               ValueChanged="OnChangeActiveWeek"
+               Disabled="@Disabled"
+               ReadOnly="@ReadOnly"
+               Clearable
+               AdornmentIcon="@Icons.Material.Filled.DateRange"
+               AdornmentColor="Color.Dark">
+
+        @foreach (var activeWeekGetDTO in ActiveWeeksGetDTO)
+        {
+            <MudSelectItem T="string" Value="@activeWeekGetDTO.Id.ToString()">@activeWeekGetDTO.OptionText</MudSelectItem>
+        }
+
+    </MudSelect>
+}
+else
+{
+    <MudSelect T="string"
+               Label="Carregando Semanass..."
+               Variant="Variant.Outlined"
+               Disabled="true"
+               AdornmentIcon="@Icons.Material.Filled.DateRange"
+               AdornmentColor="Color.Dark" />
+}
+

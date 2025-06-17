@@ -1,0 +1,37 @@
+﻿@inherits FruitSelectComponentBase
+@attribute [Authorize]
+
+@if (PageIsReady)
+{
+    <MudAutocomplete T="string"
+                     Label="Fruta"
+                     Variant="Variant.Outlined"
+                     Value="@(!string.IsNullOrEmpty(FruitIdSelected) && FruitIdSelected != "0" ? FruitsGetDTO.FirstOrDefault(f => f.Id == int.Parse(FruitIdSelected)).Name : string.Empty)"
+                     ValueChanged="OnChangeFruit"
+                     Disabled="@Disabled"
+                     ReadOnly="@ReadOnly"
+                     Clearable="@Clearable"
+                     SearchFunc="Search"
+                     MaxItems="@MaxItems"
+                     AdornmentIcon="@Icons.Custom.Uncategorized.FoodApple"
+                     AdornmentColor="Color.Dark"
+                     Dense="true"
+                     AnchorOrigin="Origin.BottomCenter"
+                     TransformOrigin="Origin.BottomCenter">
+
+        @foreach (var fruitGetDTO in FruitsGetDTO)
+        {
+            <MudSelectItem T="string" Value="@fruitGetDTO.Name">@fruitGetDTO.Name</MudSelectItem>
+        }
+
+    </MudAutocomplete>
+}
+else
+{
+    <MudAutocomplete T="string"
+                     Label="Carregando Frutas..."
+                     Variant="Variant.Outlined"
+                     Disabled="true"
+                     AdornmentIcon="@Icons.Custom.Uncategorized.FoodApple"
+                     AdornmentColor="Color.Dark" />
+}

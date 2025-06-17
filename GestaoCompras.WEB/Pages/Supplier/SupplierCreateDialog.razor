@@ -1,0 +1,30 @@
+﻿@inherits SupplierCreateDialogBase
+@attribute [Authorize]
+
+<EditForm Model="SupplierPostDTO" OnValidSubmit="CreateSupplierAsync">
+    <DataAnnotationsValidator />
+
+    <MudDialog DefaultFocus="DefaultFocus.FirstChild">
+        <DialogContent>
+
+            @if (CrudControl.PageIsReady)
+            {
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="@SupplierPostDTO.Name" Label="Nome do fornecedor" Variant="Variant.Outlined" />
+                        <ValidationMessage For="@(() => SupplierPostDTO.Name)" />
+                    </MudItem>
+                </MudGrid>
+            }
+            else
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate Class="my-7" />
+            }
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Color="Color.Dark" Disabled="@(!CrudControl.PageIsReady)">Fechar</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!CrudControl.PageIsReady)">Salvar</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>

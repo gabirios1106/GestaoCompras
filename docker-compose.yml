@@ -1,0 +1,69 @@
+name: gestaocompras_dev
+ 
+services:
+  postgresql_dev:
+    image: postgres
+    container_name: postgresql_dev
+    restart: on-failure:3
+    environment:
+      POSTGRES_USER: gestaocompras_dev_user
+      POSTGRES_PASSWORD: TaCchMbQXMEFEaoMicVT
+      POSTGRES_DB: gestaocompras_dev_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      #- 5432:5432
+      - "5432"
+    networks:
+      - backend_dev
+    volumes:
+      - pg_data:/var/lib/postgresql/data/pgdata/
+ 
+  pgadmin_dev:
+    image: dpage/pgadmin4
+    container_name: pgadmin_dev
+    restart: on-failure:3
+    environment:
+      PGADMIN_DEFAULT_EMAIL: gabrielsrios1106@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: Ga110600
+    ports:
+      - 8090:80
+    networks:
+      - backend_dev
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgresql_dev
+ 
+  gestaocompras_dev_api:
+    build:
+      context: .
+      dockerfile: GestaoCompras.API/Docker/API.Development.Dockerfile
+    image: gestaocompras_api:dev
+    restart: on-failure:3
+    container_name: gestaocompras_dev_api
+    ports:
+      - 30497:8081
+    volumes:
+      - D:\DEV\GestaoCompras\GestaoCompras.API\bin\Debug\net8.0:/app
+      - api_cert_data:/home/app/.aspnet/https
+      - api_log_data:/opt/api/logs
+    networks:
+      - backend_dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=nwov7zjSEZzcJKdwQnXD
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/home/app/.aspnet/https/GestaoCompras.API.pfx
+    depends_on:
+      - postgresql_dev
+ 
+networks:
+  backend_dev:
+    driver: bridge
+ 
+volumes:
+  pg_data:
+  pgadmin_data:
+  api_cert_data:
+  api_log_data:

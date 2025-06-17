@@ -1,0 +1,36 @@
+﻿@inherits UserMenuBase
+@attribute [Authorize]
+
+@* <MudMenu AnchorOrigin="Origin.TopLeft" TransformOrigin="Origin.TopRight">
+    <ActivatorContent>
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Style="color: #FFFFFF" title="Opções" aria-label="Opções" />
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem IconSize="Size.Small" IconColor="Color.Dark" OnClick="LogoutAsync" Icon="@Icons.Material.Filled.Logout">Sair</MudMenuItem>
+    </ChildContent>
+</MudMenu> *@
+
+<MudMenu TransformOrigin="Origin.TopRight">
+    <ActivatorContent>
+        <MudIconButton Icon="@Icons.Material.Filled.Notifications" Style="color: #FFFFFF" title="Usuario" aria-label="Usuario" />
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem Icon="@Icons.Material.Filled.Person" Style="color: #000000" Disabled>@Name</MudMenuItem>
+        <MudMenuItem Icon="@BatteryLevelIcon" IconSize="Size.Small" Title="Tempo de sessão">Sessão</MudMenuItem>
+        <MudMenuItem IconSize="Size.Small" IconColor="Color.Dark" OnClick="LogoutAsync" Icon="@Icons.Material.Filled.Logout">Sair</MudMenuItem>
+    </ChildContent>
+</MudMenu>
+<MudMenu TransformOrigin="Origin.TopRight">
+    <ActivatorContent>
+        <MudIconButton Icon="@Icons.Material.Filled.Person" Style="color: #FFFFFF" title="Usuario" aria-label="Usuario" />
+    </ActivatorContent>
+    <ChildContent>
+        <MudMenuItem Icon="@Icons.Material.Filled.Person" Style="color: #000000" Disabled>@Name</MudMenuItem>
+        <MudMenuItem Icon="@BatteryLevelIcon" IconSize="Size.Small" Title="Tempo de sessão">Sessão</MudMenuItem>
+        <MudMenuItem IconSize="Size.Small" IconColor="Color.Dark" OnClick="LogoutAsync" Icon="@Icons.Material.Filled.Logout">Sair</MudMenuItem>
+    </ChildContent>
+</MudMenu>
+@* <MudText Style="color: #FFFFFF">@Name</MudText>
+
+<MudIcon Icon="@BatteryLevelIcon" Size="Size.Small" Style="color: #FFFFFF" Title="Tempo de sessão" aria-label="Tempo de sessão" />
+ *@

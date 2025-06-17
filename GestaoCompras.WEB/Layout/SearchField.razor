@@ -1,0 +1,25 @@
+﻿@inherits SearchFieldBase
+@attribute [Authorize]
+
+<MudTextField @bind-Value="@SearchValue"
+              Label="@PlaceHolderMessage"
+              HelperText="Digite uma ou mais palavras para pequisar nos registros"
+              AdornmentAriaLabel="Digite uma ou mais palavras para pequisar nos registros"
+              Variant="Variant.Outlined"
+              Margin="Margin.Dense"
+              Clearable
+              AutoFocus
+              Adornment="Adornment.End"
+              AdornmentIcon="@Icons.Material.Filled.Search"
+              AdornmentColor="Color.Info"
+              OnAdornmentClick="OnClickSearchAsync"
+              OnKeyUp="OnKeyUpSearchAsync"
+              Disabled="@Disabled"
+              @ref="FieldSearch" />
+
+<MudIconButton Icon="@Icons.Material.Filled.Refresh"
+               Color="Color.Info"
+               OnClick="OnClickSearchAsync"
+               Disabled="@Disabled"
+               title="Atualizar Página"
+               aria-label="Atualizar Página" />

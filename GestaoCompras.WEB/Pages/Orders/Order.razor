@@ -1,0 +1,310 @@
+﻿@page "/Order"
+@inherits OrderBase
+@attribute [Authorize]
+
+@if (UserRole == UserRole.Administrador)
+{
+    <MudContainer Class="mt-10 px-2" MaxWidth="MaxWidth .False">
+        <MudGrid Spacing="7">
+
+            <MudItem xs="12" sm="12" md="12">
+                <MudText Typo="Typo.h4" Class="text-primary font-weight-bold" Align="Align.Center">
+                    Pedidos
+                </MudText>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12"></MudItem>
+
+            <MudItem xs="12" sm="12" md="2">
+                <MudPaper Class="d-flex justify-center align-start" Elevation="0">
+                    <MudButton Variant="Variant.Filled" Color="Color.Transparent" FullWidth="true" OnClick="ShowCreateDialog">Pedido</MudButton>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="4" sm="4" md="2">
+                <MudPaper Class="d-flex justify-start align-start" Elevation="0">
+                    <SearchByIdField SearchAction="@CrudControl.SearchItemByIdAsync" Autofocus="Autofocus = false" PlaceHolderMessage="Id" HelperMessage="Pedido" SearchIdValue="@CrudControl.SearchIdValue" Disabled="@(!CrudControl.PageIsReady)" />
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="5" sm="4" md="2">
+                <MudPaper Class="d-flex justify-center align-start" Elevation="0">
+                    <SelectItemsPerPage ChangeItemsPerPage="CrudControl.ChangeItemsPerPageAsync" Disabled="@(!CrudControl.PageIsReady)" />
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="2" sm="4" md="1">
+                <MudPaper Class="d-flex justify-center align-start" Elevation="0">
+                    <CheckSlider Checked="@CrudControl.ShowInactive" ChangeInactiveOption="@CrudControl.ChangeInactiveOptionAsync" Disabled="@(!CrudControl.PageIsReady)" />
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="5">
+                <MudPaper Class="d-flex justify-end align-start" Elevation="0">
+                    <SearchField SearchAction="@CrudControl.SearchItemAsync" Autofocus="Autofocus = false" PlaceHolderMessage="Pesquisar produto..." SearchValue="@CrudControl.SearchValue" Disabled="@(!CrudControl.PageIsReady)" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="4" md="4">
+                <ActiveWeeksSelectComponent ActiveWeekIdSelected="@ActiveWeekIdSelected" ChangeActiveWeekIdSelected="ChangeActiveWeekIdSelected" ChangeInitialDateSelected="ChangeInitialDateSelected" ChangeEndDateSelected="ChangeEndDateSelected" ReloadPage="ReloadPage" RefreshWeeks="@RefreshWeeks" />
+            </MudItem>
+            <MudItem xs="12" sm="4" md="4">
+                <MudPaper Class="d-flex justify-start align-start" Elevation="0">
+                    <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="Data Inicial" DateFormat="dd/MM/yyyy" @bind-Date="InitialDate" Disabled="@(!CrudControl.PageIsReady)" Clearable />
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="4" md="4">
+                <MudPaper Class="d-flex justify-center align-start" Elevation="0">
+                    <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="Data Final" DateFormat="dd/MM/yyyy" @bind-date="FinalDate" Disabled="@(!CrudControl.PageIsReady)" Clearable />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Outlined="true" Class="mud-theme-transparent d-flex flex-row justify-center align-center py-4 px-6 mx-4 rounded-lg">
+                    <MudCardContent>
+                        <MudIconButton Icon="@(HideShowTotalOpenPrice ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                                       OnClick="ChangeHideShowTotalOpenPrice" />
+                    </MudCardContent>
+                    <MudCardContent>
+                        <MudText>Total em aberto</MudText>
+                        <MudText Typo="Typo.h5" Color="Color.Error">
+                            @(HideShowTotalOpenPrice ? AllToPayHiden : AllToPayMoney.ToString("C", CultureInfoPtBR.NumberFormat))
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Outlined="true" Class="mud-theme-transparent d-flex flex-row justify-center align-center py-4 px-6 mx-4 rounded-lg">
+                    <MudCardContent>
+                        <MudIconButton Icon="@(HideShowTotalCheck ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                                       OnClick="ChangeHideShowTotalCheck" />
+                    </MudCardContent>
+                    <MudCardContent>
+                        <MudText>Boleto/Cheque</MudText>
+                        <MudButton Color="Color.Transparent" Style="font-weight: normal; text-align: center" Variant="Variant.Text" OnClick="NavigationOrderTicket">
+                            <MudText Typo="Typo.h5" Color="Color.Error">
+                                @(HideShowTotalCheck ? AllToPayHiden : AllToPayTicket.ToString("C", CultureInfoPtBR.NumberFormat))
+                            </MudText>
+                        </MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Outlined="true" Class="mud-theme-transparent d-flex flex-row justify-center align-center py-4 px-6 mx-4 rounded-lg">
+                    <MudCardContent>
+                        <MudIconButton Icon="@(HideShowTotalPrice ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                                       OnClick="ChangeHideShowTotalPrice" />
+                    </MudCardContent>
+                    <MudCardContent>
+                        <MudText>Total a pagar</MudText>
+                        <MudText Typo="Typo.h5" Color="Color.Error">
+                            @(HideShowTotalPrice ? AllToPayHiden : AllToPay.ToString("C", CultureInfoPtBR.NumberFormat))
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="3">
+                <MudCard Outlined="true" Class="mud-theme-transparent d-flex flex-row justify-center align-center py-4 px-6 mx-4 rounded-lg">
+                    <MudCardContent>
+                        <MudIconButton Icon="@(HideShowTotalPriceFirstShop ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                                       OnClick="ChangeHideShowTotalPriceFirstShop" />
+                    </MudCardContent>
+                    <MudCardContent>
+                        <MudText>loja 1</MudText>
+                        <MudText Typo="Typo.h5" Color="Color.Error">
+                            @(HideShowTotalPriceFirstShop ? AllToPayHiden : AllToPayStore1.ToString("C", CultureInfoPtBR.NumberFormat))
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="3">
+                <MudCard Outlined="true" Class="mud-theme-transparent d-flex flex-row justify-center align-center py-4 px-6 mx-4 rounded-lg">
+                    <MudCardContent>
+                        <MudIconButton Icon="@(HideShowTotalPriceSecondShop ? Icons.Material.Filled.VisibilityOff : Icons.Material.Filled.Visibility)"
+                                       OnClick="ChangeHideShowTotalPriceSecondShop" />
+                    </MudCardContent>
+                    <MudCardContent>
+                        <MudText>loja 2</MudText>
+                        <MudText Typo="Typo.h5" Color="Color.Error">
+                            @(HideShowTotalPriceSecondShop ? AllToPayHiden : AllToPayStore2.ToString("C", CultureInfoPtBR.NumberFormat))
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12">&nbsp;</MudItem>
+
+            @if (OrdersGetDTO is null)
+            {
+                <DataGridSkeleton />
+            }
+            else
+            {
+                <MudItem xs="12">
+                    <MudDataGrid T="OrderGetDTO"
+                                 Items="OrdersGetDTO"
+                                 SortMode="SortMode.None"
+                                 Hover="true"
+                                 Dense="false"
+                                 Striped="true"
+                                 ColumnResizeMode="ResizeMode.None"
+                                 DragDropColumnReordering="false"
+                                 Elevation="5">
+
+                        <Columns>
+                            <PropertyColumn Property="o => o.Id" Title="Id" CellStyle="font-weight: bold" />
+                            <PropertyColumn Property="o => o.FruitName" Title="Fruta" />
+                            <TemplateColumn Title="Fornecedor">
+                                <CellTemplate Context="context">
+                                    <MudButton Color="Color.Transparent" Style="font-weight: normal; text-align: center" Variant="Variant.Text" OnClick="() => FilterBySupplier(context.Item.SupplierName)">
+                                        @context.Item.SupplierName
+                                    </MudButton>
+                                </CellTemplate>
+                            </TemplateColumn>
+                            <PropertyColumn Property="o => o.BackLoad" Title="Trás" />
+                            <PropertyColumn Property="o => o.MiddleLoad" Title="Meio" />
+                            <PropertyColumn Property="o => o.FrontLoad" Title="Frente" />
+                            <PropertyColumn Property="o => o.TotalLoad" Title="Carga total" />
+                            <PropertyColumn Property="o => o.StoreName" Title="Loja" />
+                            <TemplateColumn @* CellClass="justify-center" *@ title="Preço">
+                                <CellTemplate>
+                                    <MudText Typo="Typo.body2">@context.Item.UnitPrice.ToString("C", CultureInfoPtBR.NumberFormat)</MudText>
+                                </CellTemplate>
+                            </TemplateColumn>
+                            <TemplateColumn @* CellClass="justify-center" *@ title="Total">
+                                <CellTemplate>
+                                    <MudText Typo="Typo.body2">@context.Item.TotalPrice.ToString("C", CultureInfoPtBR.NumberFormat)</MudText>
+                                </CellTemplate>
+                            </TemplateColumn>
+
+                            <PropertyColumn Property="o => o.CreatedAt.ToLocalTime().ToShortDateString()" Title="Data de criação" />
+                            <PropertyColumn Property="o => o.Observation" Title="Observação" />
+
+                            <TemplateColumn CellClass="justify-center align-center" Title="Status">
+                                <CellTemplate>
+                                    <MudStack Row>
+                                        @if (context.Item.StatusOrder == StatusOrder.A_PAGAR)
+                                        {
+                                            <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Error" OnClick="(() => ChangeOrderStatus(context.Item))" title="A PAGAR" Size="Size.Medium" />
+                                        }
+                                        @if (context.Item.StatusOrder == StatusOrder.PAGO)
+                                        {
+                                            <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Success" OnClick="(() => ChangeOrderStatus(context.Item))" title="PAGO" Size="Size.Medium" />
+                                        }
+                                        @if (context.Item.StatusOrder == StatusOrder.BOLETO_CHEQUE)
+                                        {
+                                            <MudIconButton Icon="@Icons.Material.Filled.RequestPage" Color="Color.Warning" OnClick="(() => ChangeOrderStatus(context.Item))" title="BOLETO OU CHEQUE" Size="Size.Medium" />
+                                        }
+                                    </MudStack>
+                                </CellTemplate>
+                            </TemplateColumn>
+                            <TemplateColumn CellClass="justify-center" DragAndDropEnabled="false">
+                                <CellTemplate>
+                                    <MudStack Row>
+                                        <MudButtonGroup Size="Size.Small" OverrideStyles="false">
+                                            <CrudOptions EditButton="true"
+                                                         ShowUpdateDialog="(() => ShowUpdateDialog(context.Item))"
+                                                         ShowConfirmationDelete="@(() => ShowConfirmationDelete(context.Item.Id))"
+                                                         Item="context.Item" />
+                                        </MudButtonGroup>
+                                    </MudStack>
+                                </CellTemplate>
+                            </TemplateColumn>
+                        </Columns>
+                        <NoRecordsContent>
+                            <DataGridNoRecords ClearSearch="@CrudControl.ClearSearchAsync" />
+                        </NoRecordsContent>
+                    </MudDataGrid>
+                </MudItem>
+            }
+            <MudItem xs="12">
+                <MudPaper Class="d-flex justify-center align-start" Elevation="0">
+                    <MudPagination Size="Size.Medium"
+                                   Variant="Variant.Filled"
+                                   Count="CrudControl.TotalPages"
+                                   SelectedChanged="CrudControl.SelectedPageAsync"
+                                   ShowPreviousButton="true"
+                                   ShowNextButton="true"
+                                   ShowFirstButton="true"
+                                   ShowLastButton="true"
+                                   Class="mt-4"
+                                   Disabled="@(OrdersGetDTO is null ? true : (OrdersGetDTO.Count == 0 ? true : false))" />
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}
+
+@if (UserRole == UserRole.Funcionario)
+{
+    <MudContainer Class="mt-10 px-2" MaxWidth="MaxWidth .False">
+        <MudGrid Spacing="7">
+
+            <MudItem xs="12" sm="12" md="12">
+                <MudText Typo="Typo.h4" Class="text-primary font-weight-bold" Align="Align.Center">
+                    Carga do dia - @DateTime.Now.ToShortDateString()
+                </MudText>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12"></MudItem>
+
+
+            <MudItem xs="12" sm="12" md="12">
+                <MudPaper Class="d-flex justify-end align-start" Elevation="0">
+                    <SearchField SearchAction="@CrudControl.SearchItemAsync" Autofocus="Autofocus = false" PlaceHolderMessage="Pesquisar produto..." SearchValue="@CrudControl.SearchValue" Disabled="@(!CrudControl.PageIsReady)" />
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12">&nbsp;</MudItem>
+
+            @if (OrdersGetDTO is null)
+            {
+                <DataGridSkeleton />
+            }
+            else
+            {
+                <MudItem xs="12">
+                    <MudDataGrid T="OrderGetDTO"
+                                 Items="OrdersGetDTO"
+                                 SortMode="SortMode.None"
+                                 Hover="true"
+                                 Dense="false"
+                                 Striped="true"
+                                 ColumnResizeMode="ResizeMode.None"
+                                 DragDropColumnReordering="false"
+                                 Elevation="5">
+
+                        <Columns>
+                            <PropertyColumn Property="o => o.FruitName" Title="Fruta" />
+                            <TemplateColumn Title="Fornecedor">
+                                <CellTemplate Context="context">
+                                    <MudButton Color="Color.Transparent" Style="font-weight: normal; text-align: center" Variant="Variant.Text" OnClick="() => FilterBySupplier(context.Item.SupplierName)">
+                                        @context.Item.SupplierName
+                                    </MudButton>
+                                </CellTemplate>
+                            </TemplateColumn>
+                            <PropertyColumn Property="o => o.BackLoad" Title="Trás" />
+                            <PropertyColumn Property="o => o.MiddleLoad" Title="Meio" />
+                            <PropertyColumn Property="o => o.FrontLoad" Title="Frente" />
+                            <PropertyColumn Property="o => o.TotalLoad" Title="Carga total" />
+                            <PropertyColumn Property="o => o.StoreName" Title="Loja" />
+                            <PropertyColumn Property="o => o.CreatedAt.ToLocalTime().ToShortDateString()" Title="Data de criação" />
+                        </Columns>
+                        <NoRecordsContent>
+                            <DataGridNoRecords ClearSearch="@CrudControl.ClearSearchAsync" />
+                        </NoRecordsContent>
+                    </MudDataGrid>
+                </MudItem>
+            }
+            <MudItem xs="12">
+                <MudPaper Class="d-flex justify-center align-start" Elevation="0">
+                    <MudPagination Size="Size.Medium"
+                                   Variant="Variant.Filled"
+                                   Count="CrudControl.TotalPages"
+                                   SelectedChanged="CrudControl.SelectedPageAsync"
+                                   ShowPreviousButton="true"
+                                   ShowNextButton="true"
+                                   ShowFirstButton="true"
+                                   ShowLastButton="true"
+                                   Class="mt-4"
+                                   Disabled="@(OrdersGetDTO is null ? true : (OrdersGetDTO.Count == 0 ? true : false))" />
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+}
+

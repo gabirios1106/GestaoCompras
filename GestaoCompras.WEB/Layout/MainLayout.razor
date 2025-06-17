@@ -1,0 +1,51 @@
+﻿@using GestaoCompras.Web.Pages.Orders
+@using GestaoCompras.Web.Services.Access
+@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<AuthorizeView>
+    <Authorized>
+        <MudLayout>
+            <MudAppBar Fixed style="background-color:#201e1f">
+                <MudImage class="rounded-lg" Alt="Logo mesa do rei" Src="/images/LogoPrincipal.jpg" Width="70" />
+                <MudSpacer />
+                <MudButton Href="/Ticket" Color="Color.Transparent" Style="border: none;" Variant="Variant.Outlined">
+                    <MudText Style="color:#ffffff">Cheques</MudText>
+                </MudButton>
+                <MudButton Href="/Order" Color="Color.Transparent" Style="border: none;" Variant="Variant.Outlined">
+                    <MudText Style="color:#ffffff">Pedidos</MudText>
+                </MudButton>
+                <MudSpacer />
+                <UserMenu />
+            </MudAppBar>
+            <MudMainContent Class="mx-4 mb-5 mt-1">
+                @Body
+            </MudMainContent>
+        </MudLayout>
+    </Authorized>
+    <NotAuthorized>
+        <MudPaper Width="100%" Class="main-container" Style="background-color:#201e1f" Square="true">
+            <MudContainer MaxWidth="MaxWidth.Medium">
+                <UserLogin />
+            </MudContainer>
+        </MudPaper>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    [Inject] ILogger<OrderBase> Logger { get; set; }
+    protected UserRole UserRole { get; set; }
+    [Inject] ISessionDataService SessionDataService { get; set; }
+
+    protected override async void OnInitialized()
+    {
+        Logger.LogInformation("Inicialização da página de pedidos");
+        UserRole = await SessionDataService.GetSavedUserRoleAsync();
+    }
+
+}

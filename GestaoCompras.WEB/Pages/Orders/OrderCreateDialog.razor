@@ -1,0 +1,120 @@
+﻿@inherits OrderCreateDialogBase
+@attribute [Authorize]
+
+<EditForm Model="OrderPostDTO" OnValidSubmit="CreateOrderAsync">
+    <DataAnnotationsValidator />
+
+    <MudDialog>
+        <DialogContent>
+            @if (CrudControl.PageIsReady)
+            {
+                <MudGrid Spacing="3">
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudStack Row="true" Class="mb-3">
+                            <FruitSelectComponent ChangeFruitSelected="ChangeFruitSelected" ChangeUnitPriceSelected="ChangeUnitPriceSelected" NewFruitIdSelected="@NewFruitIdSelected.ToString()" Clearable />
+                            <MudIconButton Icon="@Icons.Material.Filled.AddCircle" Size="Size.Small" aria-label="delete" Color="Color.Primary" OnClick="ShowCreateFruitDialog" />
+                        </MudStack>
+                        <ValidationMessage For="@(() => OrderPostDTO.FruitId)" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6" md="4">
+                        <MudStack Row="true" Class="mb-3">
+                            <SupplierSelectComponent ChangeSupplierSelected="ChangeSupplierSelected" NewSupplierIdSelected="@NewSupplierIdSelected.ToString()" Clearable />
+                            <MudIconButton Icon="@Icons.Material.Filled.AddCircle" Size="Size.Small" aria-label="delete" Color="Color.Primary" OnClick="ShowCreateSupplierDialog" />
+                        </MudStack>
+                        <ValidationMessage For="@(() => OrderPostDTO.SupplierId)" />
+                    </MudItem>
+                    <MudItem xs="6" sm="6" md="2">
+                        <MudNumericField @bind-Value="@OrderPostDTO.UnitPrice" Label="Valor unitário" Variant="Variant.Outlined" Clearable Min="0.01" />
+                        <ValidationMessage For="@(() => OrderPostDTO.UnitPrice)" />
+                    </MudItem>
+                    <MudItem xs="6" sm="6" md="2">
+                        <MudCheckBox @bind-Value="PaymentMethod" Label="Boleto ou cheque"></MudCheckBox>
+                    </MudItem>
+                    @if (PaymentMethod)
+                    {
+                        <MudItem xs="12" sm="12" md="12">
+                            <MudPaper Class="d-flex justify-start align-start" Elevation="0">
+                                <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="Data de pagamento" DateFormat="dd/MM/yyyy" @bind-Date="@OrderPostDTO.PaymentDay" Disabled="@(!CrudControl.PageIsReady)" Clearable />
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="12" sm="12" md="12"></MudItem>
+                    }
+
+
+
+
+                    @foreach (var orderItemPostDTO in OrderPostDTO.OrderItemsPostDTO)
+                    {
+                        <MudItem xs="12" sm="12" md="12"></MudItem>
+                        <MudItem xs="12" sm="12" md="12">
+                            <div class="d-flex align-items-center">
+                                <MudText>@StoresGetDTO.FirstOrDefault(s => s.Id == orderItemPostDTO.StoreId).Name&nbsp;</MudText>
+                                <MudIcon Icon="@Icons.Material.Filled.Store" Class="me-1" />
+                            </div>
+                        </MudItem>
+
+                        <MudItem xs="4" sm="3" md="2">
+                            <MudNumericField @bind-Value="@orderItemPostDTO.BackLoad" Label="Trás" Variant="Variant.Outlined" Min="0" OnBlur="@(() => orderItemPostDTO.CalculateTotalLoad(OrderPostDTO.UnitPrice))" />
+                            <ValidationMessage For="@(() => orderItemPostDTO.BackLoad)" />
+                        </MudItem>
+                        <MudItem xs="4" sm="3" md="2">
+                            <MudNumericField @bind-Value="@orderItemPostDTO.MiddleLoad" Label="Meio" Variant="Variant.Outlined" Min="0" OnBlur="@(() => orderItemPostDTO.CalculateTotalLoad(OrderPostDTO.UnitPrice))" />
+                            <ValidationMessage For="@(() => orderItemPostDTO.MiddleLoad)" />
+                        </MudItem>
+                        <MudItem xs="4" sm="3" md="2">
+                            <MudNumericField @bind-Value="@orderItemPostDTO.FrontLoad" Label="Frente" Variant="Variant.Outlined" Min="0" OnBlur="@(() => orderItemPostDTO.CalculateTotalLoad(OrderPostDTO.UnitPrice))" />
+                            <ValidationMessage For="@(() => orderItemPostDTO.FrontLoad)" />
+                        </MudItem>
+                        <MudItem xs="6" sm="3" md="3">
+                            <MudTextField @bind-Value="@orderItemPostDTO.TotalLoad" Label="Carga Total" Variant="Variant.Outlined" Readonly />
+                        </MudItem>
+                        <MudItem xs="6" sm="6" md="3">
+                            <MudField Label="Valor Total" Variant="Variant.Outlined">@orderItemPostDTO.TotalPrice.ToString("C", CultureInfoPtBR.NumberFormat)</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="12">
+                            <MudTextField @bind-Value="@orderItemPostDTO.Observation" Label="Observação (campo opcional)" Variant="Variant.Outlined" Min="0" OnBlur="@(() => orderItemPostDTO.CalculateTotalLoad(OrderPostDTO.UnitPrice))" />
+                            <ValidationMessage For="@(() => orderItemPostDTO.Observation)" />
+                        </MudItem>
+                    }
+
+                </MudGrid>
+            }
+            else
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate Class="my-7" />
+            }
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Color="Color.Dark" Disabled="@(!CrudControl.PageIsReady)">Fechar</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!CrudControl.PageIsReady)">Salvar</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+    @if (UserRole == UserRole.Funcionario)
+    {
+        @if (CrudControl.PageIsReady)
+        {
+            <MudContainer Class="d-flex justify-center align-center" Style="height: 100vh;">
+                <MudCard Class="text-center p-6" Elevation="5">
+                    <MudCardContent>
+                        <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Error" Size="Size.Large" />
+                        <MudText Typo="Typo.h4" Class="text-danger font-weight-bold mt-2">
+                            Você não tem permissão para mexer aqui!
+                        </MudText>
+                        <MudText Typo="Typo.body1" Class="mt-2">
+                            Se você acredita que isso é um erro, entre em contato com o administrador.
+                        </MudText>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="mt-4" Href="/order">
+                            Voltar para a página inicial
+                        </MudButton>
+                    </MudCardContent>
+                </MudCard>
+            </MudContainer>
+        }
+        else
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate Class="my-7" />
+        }
+    }
+</EditForm>

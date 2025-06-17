@@ -1,0 +1,35 @@
+﻿@inherits ConfirmationDialogBase
+@attribute [Authorize]
+
+    <MudDialog>
+        <DialogContent>
+            <MudText Class="mt-4">
+                <MudIcon Icon="@Icons.Material.Filled.QuestionMark" Color="Color.Error" Size="Size.Small" /> @ConfirmMessage
+            </MudText>
+            <MudText Class="mt-2 mb-4">
+                <MudIcon Icon="@Icons.Material.Filled.Warning" Color="Color.Warning" Size="Size.Small" /> @AlertMessage
+            </MudText>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Color="@CancelButtonColor">@CancelButtonText</MudButton>
+            <MudButton OnClick="OnClickConfirmAsync" Variant="Variant.Filled" Color="@ConfirmButtonColor">@ConfirmButtonText</MudButton>
+        </DialogActions>
+    </MudDialog>
+
+
+  @*   <MudContainer Class="d-flex justify-center align-center" Style="height: 100vh;">
+        <MudCard Class="text-center p-6" Elevation="5">
+            <MudCardContent>
+                <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Error" Size="Size.Large" />
+                <MudText Typo="Typo.h4" Class="text-danger font-weight-bold mt-2">
+                    Você não tem permissão para mexer aqui!
+                </MudText>
+                <MudText Typo="Typo.body1" Class="mt-2">
+                    Se você acredita que isso é um erro, entre em contato com o administrador.
+                </MudText>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" Class="mt-4" Href="/order">
+                    Voltar para a página inicial
+                </MudButton>
+            </MudCardContent>
+        </MudCard>
+    </MudContainer> *@

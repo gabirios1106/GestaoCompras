@@ -1,0 +1,10 @@
+﻿@inherits CheckSliderBase
+@attribute [Authorize]
+
+<MudSwitch T="bool"
+           Color="Color.Info"
+           UncheckedColor="Color.Default"
+           Size="Size.Large"
+           Value="@Checked"
+           ValueChanged="ChangeInactiveOption"
+           Disabled="@Disabled" />

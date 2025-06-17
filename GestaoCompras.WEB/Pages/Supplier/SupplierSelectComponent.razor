@@ -1,0 +1,38 @@
+﻿@inherits SupplierSelectComponentBase
+@attribute [Authorize]
+
+@if (PageIsReady)
+{
+    <MudAutocomplete T="string"
+                     Label="Fornecedor"
+                     Variant="Variant.Outlined"
+                     Value="@(!string.IsNullOrEmpty(SupplierIdSelected) && SupplierIdSelected != "0" ? SuppliersGetDTO.FirstOrDefault(f => f.Id == int.Parse(SupplierIdSelected)).Name : string.Empty)"
+                     ValueChanged="OnChangeSupplier"
+                     Disabled="@Disabled"
+                     ReadOnly="@ReadOnly"
+                     Clearable="@Clearable"
+                     SearchFunc="Search"
+                     MaxItems="@MaxItems"
+                     AdornmentIcon="@Icons.Material.Filled.AddShoppingCart"
+                     AdornmentColor="Color.Dark"
+                     Dense="true"
+                     AnchorOrigin="Origin.BottomCenter"
+                     TransformOrigin="Origin.BottomCenter">
+
+        @foreach (var supplierGetDTO in SuppliersGetDTO)
+        {
+            <MudSelectItem T="string" Value="@supplierGetDTO.Name">@supplierGetDTO.Name</MudSelectItem>
+        }
+
+    </MudAutocomplete>
+}
+else
+{
+    <MudAutocomplete T="string"
+                     Label="Carregando Fornecedores..."
+                     Variant="Variant.Outlined"
+                     Disabled="true"
+                     AdornmentIcon="@Icons.Material.Filled.AddShoppingCart"
+                     AdornmentColor="Color.Dark" />
+}
+

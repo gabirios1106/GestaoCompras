@@ -1,0 +1,17 @@
+﻿@inherits SelectItemsPerPageBase
+@attribute [Authorize]
+
+<MudSelect Margin="Margin.Dense"
+           T="int"
+           Label="Itens por página"
+           Value="@SelectedValue"
+           Variant="Variant.Outlined"
+           ValueChanged="OnChangeItemsPerPageAsync"
+           Disabled="@Disabled">
+
+    @for (var i = 0; i < SelectScale.Length; i++)
+    {
+        <MudSelectItem T="int" Value="@SelectScale[i]" />
+    }
+
+</MudSelect>

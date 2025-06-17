@@ -1,0 +1,48 @@
+﻿@inherits DataGridNoRecordsBase
+@attribute [Authorize]
+
+<MudGrid Spacing="0">
+    <MudItem xs="3"><MudPaper Elevation="0">&nbsp;</MudPaper></MudItem>
+    <MudItem xs="6">
+        <MudCard Elevation="0">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudPaper Elevation="0" Class="d-flex justify-start align-start">
+                        <MudText Typo="Typo.h6" Style="font-weight: bold">Nenhum registro encontrado</MudText>
+                    </MudPaper>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIcon Icon="@Icons.Material.Filled.Error" Size="Size.Large" Color="Color.Info" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+
+                @if (ClearSearch.HasDelegate)
+                {
+                    <MudPaper Elevation="0" Class="d-flex justify-start align-start">
+                        <MudText Typo="Typo.body1">A tabela está vazia ou o critério de busca não corresponde a nenhum registro existente</MudText>
+                    </MudPaper>
+                    <MudPaper Elevation="0" Class="d-flex justify-start align-start">
+                        <MudText Typo="Typo.caption">Tente novamente com um critério de busca diferente ou sem nenhum critério</MudText>
+                    </MudPaper>
+                }
+                else
+                {
+                    <MudPaper Elevation="0" Class="d-flex justify-start align-start">
+                        <MudText Typo="Typo.body1">A tabela está vazia ou nenhum registro foi encontrado com os critérios de busca fornecidos</MudText>
+                    </MudPaper>
+                }
+
+            </MudCardContent>
+
+            @if (ClearSearch.HasDelegate)
+            {
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Info" StartIcon="@Icons.Material.Filled.Clear" OnClick="@OnClearSearchAsync">Limpar busca</MudButton>
+                </MudCardActions>
+            }
+
+        </MudCard>
+    </MudItem>
+    <MudItem xs="3"><MudPaper Elevation="0">&nbsp;</MudPaper></MudItem>
+</MudGrid>

@@ -1,0 +1,26 @@
+﻿@typeparam TItem
+@inherits CrudOptionsBase<TItem>
+@attribute [Authorize]
+
+
+@if (DetailButton)
+{
+    <MudIconButton Icon="@Icons.Material.Filled.RemoveRedEye" Variant="Variant.Filled" Color="Color.Info" OnClick="ShowItemDetail" title="Detalhes" Disabled="DisabledButtons" />
+}
+
+@if (EditButton)
+{
+    <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Color="Color.Primary" OnClick="OnClickShowUpdateDialog" title="Editar" Disabled="DisabledButtons" />
+}
+
+@if (DeleteButton)
+{
+    if (ItemActive(ItemStatus) || string.IsNullOrEmpty(ItemStatus))
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Error" OnClick="OnClickShowConfirmationDelete" title="Excluir" Disabled="DisabledButtons" />
+    }
+    else if (!ItemActive(ItemStatus))
+    {
+        <MudIconButton Icon="@Icons.Material.Filled.Unarchive" Variant="Variant.Filled" Color="Color.Success" OnClick="Activate" title="Ativar" Disabled="DisabledButtons" />
+    }
+}

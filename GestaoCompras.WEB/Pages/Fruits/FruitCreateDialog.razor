@@ -1,0 +1,30 @@
+﻿@inherits FruitCreateDialogBase
+@attribute [Authorize]
+
+<EditForm Model="FruitPostDTO" OnValidSubmit="CreateFruitAsync">
+    <DataAnnotationsValidator />
+
+    <MudDialog DefaultFocus="DefaultFocus.FirstChild">
+        <DialogContent>
+
+            @if (CrudControl.PageIsReady)
+            {
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudTextField @bind-Value="@FruitPostDTO.Name" Label="Nome da fruta" Variant="Variant.Outlined" />
+                        <ValidationMessage For="@(() => FruitPostDTO.Name)" />
+                    </MudItem>
+                </MudGrid>
+            }
+            else
+            {   
+                <MudProgressLinear Color="Color.Primary" Indeterminate Class="my-7" />
+            }
+
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel" Color="Color.Dark" Disabled="@(!CrudControl.PageIsReady)">Fechar</MudButton>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!CrudControl.PageIsReady)">Salvar</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
